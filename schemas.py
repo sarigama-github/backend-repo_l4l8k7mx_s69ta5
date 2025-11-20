@@ -11,7 +11,7 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 
 # Example schemas (replace with your own):
@@ -37,6 +37,21 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# Lead schema for contact/lead submissions
+class Lead(BaseModel):
+    """
+    Leads from the website contact form
+    Collection name: "lead"
+    """
+    nume: str = Field(..., min_length=2, max_length=120, description="Numele persoanei")
+    telefon: str = Field(..., min_length=5, max_length=30, description="Număr de telefon")
+    email: Optional[EmailStr] = Field(None, description="Email (opțional)")
+    mesaj: Optional[str] = Field(None, max_length=2000, description="Mesajul trimis")
+    source: Optional[str] = Field("website", description="Sursa lead-ului")
+    utm_source: Optional[str] = None
+    utm_medium: Optional[str] = None
+    utm_campaign: Optional[str] = None
 
 # Add your own schemas here:
 # --------------------------------------------------
